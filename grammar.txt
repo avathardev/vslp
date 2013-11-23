@@ -1,0 +1,5 @@
+PROGRAMA -> SI
+SI -> si EXPREL haz ESTATUTO finsi
+SI -> si EXPREL haz ESTATUTO  si@no ESTATUTO finsi
+EXPREL -> numero oprel numero
+ESTATUTO -> id opasign numero

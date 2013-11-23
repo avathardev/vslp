@@ -1,0 +1,8 @@
+oprel <|>
+si si
+haz haz
+finsi finsi
+si@no si@no
+numero [1-9][0-9]*
+opasign =
+id id
