@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-VS.LSA
+VS.LP
 
-Very Simple Lexical and Syntax Analyzer
+Very Simple Language Parser
 for my Compilers course at Tec de Monterrey, Campus Querétaro
 
 coded by avathar
@@ -66,7 +66,7 @@ class Lexer:
                         break
                 # should have an Error Class, maybe later
                 if not match:
-                    print " ---> Lexical Error on line %d undefined token for [ %s ] " % (line_count,word)
+                    print " ---> Lexical Error on line %d: Undefined token for [ %s ] " % (line_count,word)
         input_file.close()
 
 class Parser:
@@ -89,9 +89,6 @@ class Parser:
         """
         for rule in self.grammar:
             print rule
-
-
-
 
 
 lex = Lexer('tokens.txt')
