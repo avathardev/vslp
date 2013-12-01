@@ -1,9 +1,11 @@
-#set : name
-set id = set ( tag , attr : value , attr : value ) ;
+#set : style
+set menu = set ( menu , name : left-menu , disable : true ) ;
+style nav style ( #nav , color : 12px , font-size : 12em ) ;
 #endset
-
 #template : name
 {% objeto
-    {% objeto %}
+    for ( 3 , 12 ) {
+        {% objeto %}
+    }
 %}
 #endtemplate

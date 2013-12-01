@@ -49,7 +49,7 @@ class Lexer:
 
     def show_tokens(self):
         for token in self.tokens:
-            print "token name: %s regex: %s" % (token, self.tokens[token])
+            print "token: %s \tregex: %s" % (token, self.tokens[token])
 
     def do_lexer_with_file(self, filename):
         input_file = open(filename,'r')
@@ -94,7 +94,8 @@ class Parser:
             # separate rules by arrow symbol
             grammar_rule = line.partition("->")
             # stripping some chars from input file
-            self.grammar.append({grammar_rule[0] : grammar_rule[2].strip()})
+            #self.grammar.append({grammar_rule[0] : grammar_rule[2].strip()})
+            self.grammar.append(grammar_rule[2].split())
         grammar_file.close()
 
     def show_grammar(self):
@@ -102,24 +103,34 @@ class Parser:
         so we can take a look at parser grammar
         very straightforward
         """
-        print "   Grammar"
+        print " -->Grammar <-- "
         for rule in self.grammar:
             print rule
 
     def do_parse_from_file(self, filename):
+
+        start = 0
+
         """
         A modified LL(1) algorithm for string parsing with this language grammar
         Using list index references to match grammar rules and parsing table
         """
         input_file = open(filename)
         for line in input_file:
-            print line
+            tokens = line.split()
+            tokens.reverse()
+            current = tokens.pop()
+
         input_file.close()
 
 
 lex = Lexer('tokens.txt')
 
-#lex.show_tokens()
+print " --> Tokens <--"
+
+lex.show_tokens()
+
+print " --> Lexer <--"
 
 lex.do_lexer_with_file('input.txt')
 
@@ -127,5 +138,6 @@ parser = Parser("grammar.txt")
 
 parser.show_grammar()
 
+print " --> Start parsing <-- "
 
 parser.do_parse_from_file("input.txt")
