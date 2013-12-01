@@ -1,11 +1,9 @@
-si 49 > 23 haz
-id = 100
-finsi
+#set : name
+set id = set ( tag , attr : value , attr : value ) ;
+#endset
 
-
-
-si 100 < 12 haz
-id = 10
-si@no
-id = 2
-finsi
+#template : name
+{% objeto
+    {% objeto %}
+%}
+#endtemplate

@@ -71,32 +71,61 @@ class Lexer:
 
 class Parser:
     def __init__(self, filename):
-        self.grammar = []
         """
         Parser object to read grammar and make an syntax parser
         """
+        self.grammar = []
+        #hard coded for project, don't panic
+        self.parsing_table = [
+            # 1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27
+            [ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [ 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1,  3, -1, -1,  4,  5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1,  6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1,  7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12, 11, -1, 11, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 13, -1, 14, -1, -1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 15, -1, 15, -1, -1, -1, 16, -1]
+        ]
         grammar_file = open("grammar.txt")
         for line in grammar_file:
             # separate rules by arrow symbol
             grammar_rule = line.partition("->")
             # stripping some chars from input file
-            self.grammar.append({grammar_rule[0]: grammar_rule[2].strip()})
+            self.grammar.append({grammar_rule[0] : grammar_rule[2].strip()})
+        grammar_file.close()
 
     def show_grammar(self):
         """
         so we can take a look at parser grammar
         very straightforward
         """
+        print "   Grammar"
         for rule in self.grammar:
             print rule
+
+    def do_parse_from_file(self, filename):
+        """
+        A modified LL(1) algorithm for string parsing with this language grammar
+        Using list index references to match grammar rules and parsing table
+        """
+        input_file = open(filename)
+        for line in input_file:
+            print line
+        input_file.close()
 
 
 lex = Lexer('tokens.txt')
 
-lex.show_tokens()
+#lex.show_tokens()
 
 lex.do_lexer_with_file('input.txt')
 
 parser = Parser("grammar.txt")
 
 parser.show_grammar()
+
+
+parser.do_parse_from_file("input.txt")

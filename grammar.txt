@@ -1,5 +1,17 @@
-PROGRAMA -> SI
-SI -> si EXPREL haz ESTATUTO finsi
-SI -> si EXPREL haz ESTATUTO  si@no ESTATUTO finsi
-EXPREL -> numero oprel numero
-ESTATUTO -> id opasign numero
+A -> S C
+S -> C
+S -> #set : name D
+D -> set id = E D
+D -> style id = Y D
+D -> #endset
+E -> set (  tag  J
+Y -> style ( ' selector '  J
+J -> , attr :  value   J
+J -> ) ;
+C -> #template : name T
+T -> B #endtemplate
+T -> #endtemplate
+B -> {% objeto I
+B -> for ( num , num ) { B }
+I -> B %}
+I -> %}
