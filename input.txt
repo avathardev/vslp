@@ -1,1 +1,0 @@
-#set : id set id = set ( id , id : id , id : id ) ; #endset #template : id {% id for ( num , num ) {{% id %} } %} #endtemplate
