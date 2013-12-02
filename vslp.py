@@ -52,6 +52,7 @@ class Lexical:
                                     re.compile(token[1]),
                                     re.compile(token[2])) for token in util.TOKENS_WITH_DELIMITERS]
         self.t = []
+        self.d = []
 
     def get_grammar():
         return self.__grammar
@@ -73,6 +74,10 @@ class Lexical:
                         match = token.regexp.match(buffer_str_del)
                         if match:
                             print match.group()
+                            if token.name == 'ID' or token.name == 'NUM':
+                                self.d.append(token.name + "," + match.group())
+                            else:
+                                self.d.append(token.name)
                             self.t.append(token.name.lower())
                             buffer_str = buffer_str_del.replace(match.group(), '', 1)
                             self.source.seek(- buffer_str.__len__(), 1)
@@ -95,6 +100,10 @@ class Lexical:
                             for token in self.tokens:
                                 match = token.regexp.match(buffer_str)
                                 if match:
+                                    if token.name == 'ID' or token.name == 'NUM':
+                                        self.d.append(token.name + "," + match.group())
+                                    else:
+                                        self.d.append(token.name)
                                     self.t.append(token.name.lower())
                                     buffer_str = buffer_str.replace(match.group(), '', 1)
                                     print match.group() + "\t\t NUEVO" + buffer_str
@@ -109,6 +118,10 @@ class Lexical:
                     match = token.regexp.match(buffer_str_del)
                     if match:
                         print match.group()
+                        if token.name == 'ID' or token.name == 'NUM':
+                            self.d.append(token.name + "," + match.group())
+                        else:
+                            self.d.append(token.name)
                         self.t.append(token.name.lower())
                         buffer_str_del = buffer_str = ""
                         is_token_with_del = False
@@ -129,6 +142,10 @@ class Lexical:
                         for token in self.tokens:
                             match = token.regexp.match(buffer_str)
                             if match:
+                                if token.name == 'ID' or token.name == 'NUM':
+                                    self.d.append(token.name + "," + match.group())
+                                else:
+                                    self.d.append(token.name)
                                 self.t.append(token.name.lower())
                                 buffer_str = buffer_str.replace(match.group(), '', 1)
                                 print match.group() + " NUEVO" + buffer_str
@@ -142,6 +159,7 @@ class Lexical:
                 print "NO ACEPTADO"
                 return
         print self.t
+        print self.d
 
     def anasin(self):
 
@@ -325,12 +343,10 @@ class Parser:
 
         self.lex = lex
         self.grammar = [production[1].split() for production in util.GRAMMAR]
-        self.intercode = []
+        self.intercode = lex.d
         self.did_pass_syntax_analysis = False
         self.string = []
         self.terminal = lex.terminals
-        #self.terminals = ["#set", ":", "id", "set", "=", "style", "#endset", "(", "'", ",", ")", ";", "#template", "#endtemplate", "{%", "for", "num", "{", "}", "%}"]
-        #self.non_terminals = ["A","S","D","E","Y","J","C","T","B","I"]
         self.non_terminal = lex.nonterminals
         self.non_terminal.extend(self.terminal)
         #hard coded for project, don't panic
@@ -392,7 +408,7 @@ class Parser:
         self.did_pass_syntax_analysis = True
 
     def build_intercode(self,token):
-        self.intercode.append(token.upper())
+        pass
 
     def show_intercode(self):
         print self.intercode
@@ -415,6 +431,7 @@ class Quadruples:
     def add_quadruple(self, one = "_", two = "_", three = "_", four = "_"):
         self.quadruple = "%s (%s, %s, %s, %s)\n" % (self.quadruple, one, two, three, four)
         self.line = self.line + 1
+        print self.quadruple
 
 
     def inner_quadruples(self, delimiter, current):
@@ -468,9 +485,6 @@ class Quadruples:
         self.add_quadruple("=",get_var_value(var_name),four=obj_type)
 
     def start_quadruples(self):
-
-        print self.intercode
-
         token = self.intercode.pop()
         # full input
         if token == "INISET":
@@ -483,6 +497,9 @@ class Quadruples:
             # full input so we have template section
             token = self.intercode.pop()
             self.add_quadruple(four = "#template" )
+            nametag = self.intercode.pop()
+            name = get_var_value(self.intercode.pop())
+            self.add_quadruple(":", name, four = "#set" )
             self.inner_quadruples("ENDTEMP",3)
             self.add_quadruple(four = "#endtemplate")
         else:
@@ -511,6 +528,7 @@ print " --> Start parsing <-- "
 parser.start_parser()
 
 # Quadruples object
+
 quad = Quadruples( parser.intercode )
 quad.start_quadruples()
 print quad.quadruple

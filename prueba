@@ -1,10 +1,10 @@
-#set:main
-set menu = set ( menu, id:main, disable:disable);
+#set : main
+set menu = set ( menu , id : main , disable : disable ) ;
 #endset
 
-#template:index
+#template : index
 {% menu
-    for (12, 45) {
+    for ( 12 , 45 ) {
         {% nav %}
     }
 %}
