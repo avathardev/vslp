@@ -414,7 +414,7 @@ class Parser:
         print self.intercode
 
 def get_var_value(identifier):
-    return identifier.partition(",")[2]
+    return identifier.split(",")[1]
 
 
 class Quadruples:
@@ -431,21 +431,19 @@ class Quadruples:
     def add_quadruple(self, one = "_", two = "_", three = "_", four = "_"):
         self.quadruple = "%s (%s, %s, %s, %s)\n" % (self.quadruple, one, two, three, four)
         self.line = self.line + 1
-        print self.quadruple
-
 
     def inner_quadruples(self, delimiter, current):
         token = self.intercode.pop()
         while(token != delimiter):
             if token == "SET" or token == "STYLE":
                 next = self.intercode.pop()
-                if next == "RPAR":
+                if next == "LPAR":
                     self.constructor(token)
                 else:
                     self.assignment(token, next)
             elif token == "COMMA":
                     self.comma()
-            elif token == "LPAR":
+            elif token == "RPAR":
                 # consume symbol
                 dot_comma = self.intercode.pop()
             elif token == "ININEST":
@@ -467,7 +465,7 @@ class Quadruples:
         endpar = self.intercode.pop()
         inikey = self.intercode.pop()
         self.add_quadruple("for",num1,num2,token)
-        self.inner_quadruples("LKEY", 1)
+        self.inner_quadruples("RKEY", 1)
 
     def comma(self):
         attr = self.intercode.pop()
