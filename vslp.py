@@ -5,9 +5,9 @@ VS.LP
 Very Simple Language Parser
 for my Compilers course at Tec de Monterrey, Campus Querétaro
 
-coded by avathar
+coded by avathar & grevych
 
-follow me: @avatharBot
+follow us: @avatharBot @grevych
 """
 
 """
@@ -18,6 +18,10 @@ may add a feature in the future to expand it's functionality
 
 import re
 import sys
+class VSLP:
+    """docstring for VSLP"""
+    def __init__(self, arg):
+        self.arg = arg
 
 class Lexer:
     """
@@ -75,26 +79,27 @@ class Parser:
         Parser object to read grammar and make an syntax parser
         """
         self.grammar = []
+        self.terminals = ["#set", ":", "id", "set", "=", "style", "#endset", "(", "'", ",", ")", ";", "#template", "#endtemplate", "{%", "for", "num", "{", "}", "%}"]
+        self.non_terminals = ["A","S","D","E","Y","J","C","T","B","I"]
+        self.non_terminals.extend(self.terminals)
         #hard coded for project, don't panic
         self.parsing_table = [
-            # 1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27
-            [ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [ 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1,  3, -1, -1,  4,  5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1,  6, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1,  7, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 10, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 12, 11, -1, 11, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 13, -1, 14, -1, -1, -1, -1, -1],
-            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 15, -1, 15, -1, -1, -1, 16, -1]
+            [ 0,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,           0,             -1,   -1,    -1,     0,  -1,  -1,  -1 ],
+            [ 2,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,           1,             -1,   -1,    -1,     1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,     3,   -1,      4,         5,  -1,  -1,  -1,  -1,  -1,          -1,             -1,   -1,    -1,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,     6,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,          -1,             -1,   -1,    -1,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,      7,        -1,  -1,  -1,  -1,  -1,  -1,          -1,             -1,   -1,    -1,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,   8,   9,   8,          -1,             -1,    9,    -1,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,          10,             -1,   -1,    -1,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,          -1,             12,   11,    11,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,          -1,             -1,   13,    14,    -1,  -1,  -1,  -1 ],
+            [-1,      -1,   -1,    -1,   -1,     -1,        -1,  -1,  -1,  -1,  -1,  -1,          -1,             -1,   15,    15,    -1,  -1,  -1,  16 ]
         ]
         grammar_file = open("grammar.txt")
         for line in grammar_file:
             # separate rules by arrow symbol
             grammar_rule = line.partition("->")
             # stripping some chars from input file
-            #self.grammar.append({grammar_rule[0] : grammar_rule[2].strip()})
             self.grammar.append(grammar_rule[2].split())
         grammar_file.close()
 
@@ -103,41 +108,52 @@ class Parser:
         so we can take a look at parser grammar
         very straightforward
         """
-        print " -->Grammar <-- "
+        print " --> Grammar <-- "
         for rule in self.grammar:
             print rule
 
-    def do_parse_from_file(self, filename):
-
-        start = 0
+    def start_parser(self):
 
         """
         A modified LL(1) algorithm for string parsing with this language grammar
-        Using list index references to match grammar rules and parsing table
+        Using list indexes references to match grammar rules and parsing table
         """
-        input_file = open(filename)
-        for line in input_file:
-            tokens = line.split()
-            tokens.reverse()
-            current = tokens.pop()
+        # starting symbol
+        stack = ["A"]
+        string = "#set : id set id = set ( id , id : id , id : id ) ; #endset #template : id {% id for ( num , num ) { {% id %} } %} #endtemplate".split()
+        string.reverse()
+        while len(string) > 0:
+            print stack
 
-        input_file.close()
+            token = string.pop()
+            token_index = self.terminals.index(token)
+
+            top = stack.pop( )
+            top_index = self.non_terminals.index(top)
+            if top == token:
+                continue
+            production = self.parsing_table[top_index][token_index]
+            if top != token:
+                string.append(token)
+            if production == -1:
+                print " --> Syntax error on grammar rule -> %s " % self.grammar[top_index]
+                exit( )
+            else:
+                rule = self.grammar[production]
+                rule.reverse( )
+                for r in rule: stack.append(r)
+                rule.reverse()
+        print "\nAnalisis Sintactico: Cadena Aceptada\n"
 
 
 lex = Lexer('tokens.txt')
-
-print " --> Tokens <--"
-
-lex.show_tokens()
-
+#print " --> Tokens <--"
+#lex.show_tokens()
 print " --> Lexer <--"
-
 lex.do_lexer_with_file('input.txt')
 
 parser = Parser("grammar.txt")
-
 parser.show_grammar()
 
 print " --> Start parsing <-- "
-
-parser.do_parse_from_file("input.txt")
+parser.start_parser()
