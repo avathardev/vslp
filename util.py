@@ -43,7 +43,6 @@ TOKENS_WITH_DELIMITERS = (
 
 
 GRAMMAR = (
-
     ('A', 'S C'),
     ('S', 'C'),
     ('S', 'iniset nametag id D'),

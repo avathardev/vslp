@@ -413,8 +413,6 @@ class Parser:
     def show_intercode(self):
         print self.intercode
 
-def get_var_value(identifier):
-    return identifier.split(",")[1]
 
 
 class Quadruples:
@@ -425,8 +423,26 @@ class Quadruples:
         self.intercode = intercode
         self.intercode.reverse()
         self.quadruple = ""
-        self.inner_vars = 0;
+        self.inner_vars = 0
+        self.in_template = False
         self.line = 0
+        self.vars = []
+
+    def get_var_value(self,identifier):
+        par = identifier.split(",")
+        if par[0] == "NUM":
+            try:
+                value = int(par[1])
+            except ValueError:
+                print "Error de sintaxis, se esperaba numero"
+        elif self.in_template:
+            if not identifier in self.vars:
+                print "Error de sintaxis, variable [ %s ] no declarada previamente" % par[1]
+                print self.vars
+                exit()
+        elif par[0] == "ID" and not self.in_template:
+            self.vars.append(identifier)
+        return par[1]
 
     def add_quadruple(self, one = "_", two = "_", three = "_", four = "_"):
         self.quadruple = "%s (%s, %s, %s, %s)\n" % (self.quadruple, one, two, three, four)
@@ -455,7 +471,7 @@ class Quadruples:
             token = self.intercode.pop()
 
     def id(self, token):
-        self.add_quadruple("{% %}",get_var_value(token),four="#template")
+        self.add_quadruple("{% %}",self.get_var_value(token),four="#template")
 
     def for_loop(self, token):
         inipar = self.intercode.pop()
@@ -480,7 +496,7 @@ class Quadruples:
     def assignment(self, obj_type, var_name):
         # consuming equals symbol
         self.intercode.pop()
-        self.add_quadruple("=",get_var_value(var_name),four=obj_type)
+        self.add_quadruple("=",self.get_var_value(var_name),four=obj_type)
 
     def start_quadruples(self):
         token = self.intercode.pop()
@@ -488,7 +504,7 @@ class Quadruples:
         if token == "INISET":
             self.add_quadruple(four = "#set")
             nametag = self.intercode.pop()
-            name = get_var_value(self.intercode.pop())
+            name = self.get_var_value(self.intercode.pop())
             self.add_quadruple(":", name, four = "#set" )
             self.inner_quadruples("ENDSET",3)
             self.add_quadruple(four = "#endset")
@@ -496,14 +512,15 @@ class Quadruples:
             token = self.intercode.pop()
             self.add_quadruple(four = "#template" )
             nametag = self.intercode.pop()
-            name = get_var_value(self.intercode.pop())
+            name = self.get_var_value(self.intercode.pop())
             self.add_quadruple(":", name, four = "#set" )
+            self.in_template = True
             self.inner_quadruples("ENDTEMP",3)
             self.add_quadruple(four = "#endtemplate")
         else:
             self.add_quadruple(four="#template")
             nametag = self.intercode.pop()
-            name = get_var_value(self.intercode.pop())
+            name = self.get_var_value(self.intercode.pop())
             self.add_quadruple(":",name,four="#template")
             self.inner_quadruples("ENDTEMP",3)
             self.add_quadruple(four="#endtemplate")

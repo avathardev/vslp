@@ -1,12 +1,18 @@
 #set : main
+
 set menu = set ( menu , id : main , disable : disable ) ;
+
+set nav = set ( menu , id : main , disable : disable ) ;
+
 #endset
 
 #template : index
+
 {% menu
     for ( 12 , 45 ) {
         {% nav %}
     }
 %}
+
 #endtemplate
 
