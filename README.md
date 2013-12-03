@@ -5,16 +5,16 @@ Very Simple Language Parser
 
 
 Descripción del Lenguaje
-o  VSLP (Very Simple Language Parser)
-o  Define en una sola sintaxis elementos de HTML y CSS
-o  Detecta errores de token inválidos, errores de sintaxis y uso invalido de objetos no definidos
+VSLP (Very Simple Language Parser)
+Define en una sola sintaxis elementos de HTML y CSS
+Detecta errores de token inválidos, errores de sintaxis y uso invalido de objetos no definidos
 
 Descripción del compilador/intérprete
-o  Lenguajes y utilerías especiales utilizadas para el desarrollo del proyecto
+Lenguajes y utilerías especiales utilizadas para el desarrollo del proyecto
     Python 2.7 con los modulos de expresiones regulares
     No se utilizan librerías externas.
 
-o  Descripción de análisis léxico
+Descripción de análisis léxico
 Patrones de construcción (Expresiones regulares)
     INISET   =  \#set
     NAMETAG  =  \:
