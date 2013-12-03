@@ -404,7 +404,7 @@ class Parser:
             try:
                 production = self.parsing_table[top_index][token_index]
             except IndexError:
-                print " --> Syntax error: expecting ->  %s  " % top
+                print " --> Syntax error: expecting -> [ %s ] got [ %s ]" % (top, token)
                 exit( )
             # report error and exit
             if production == -1:
@@ -441,6 +441,7 @@ class Quadruples:
         self.vars = []
 
     def show_quadruples(self):
+        print " Cuadruplos que describen la cadena de entrada: "
         print self.quadruple
 
     def get_var_value(self,identifier):
@@ -468,8 +469,10 @@ class Quadruples:
         while(token != delimiter):
             if token == "SET" or token == "STYLE":
                 next = self.intercode.pop()
-                if next == "LPAR":
-                    self.constructor(token)
+                if next == "LPAR" and token == "STYLE":
+                    self.style_constructor(token)
+                elif next == "LPAR" and token == "SET":
+                    self.set_constructor(token)
                 else:
                     self.assignment(token, next)
             elif token == "COMMA":
@@ -481,6 +484,8 @@ class Quadruples:
                 self.inner_quadruples("ENDNEST",current + 1)
             elif token == "FOR":
                 self.for_loop(token)
+            elif token == "SELE" or token == "APOS":
+                pass
             else:
                 self.id(token)
             token = self.intercode.pop()
@@ -490,21 +495,26 @@ class Quadruples:
 
     def for_loop(self, token):
         inipar = self.intercode.pop()
-        num1 = self.intercode.pop()
+        num1 = self.intercode.pop().split(",")[1]
         comma = self.intercode.pop()
-        num2 = self.intercode.pop()
+        num2 = self.intercode.pop().split(",")[1]
         endpar = self.intercode.pop()
         inikey = self.intercode.pop()
         self.add_quadruple("for",num1,num2,token)
         self.inner_quadruples("RKEY", 1)
 
     def comma(self):
-        attr = self.intercode.pop()
+        attr = self.intercode.pop().split(",")[1]
         two_dots = self.intercode.pop()
-        value = self.intercode.pop()
+        value = self.intercode.pop().split(",")[1]
         self.add_quadruple(":", value, four=attr)
 
-    def constructor(self, obj_type):
+    def set_constructor(self, obj_type):
+        name = self.intercode.pop()
+        self.add_quadruple("()",name,four=obj_type)
+
+    def style_constructor(self, obj_type):
+        apos = self.intercode.pop()
         name = self.intercode.pop()
         self.add_quadruple("()",name,four=obj_type)
 
@@ -540,7 +550,6 @@ class Quadruples:
             self.inner_quadruples("ENDTEMP",3)
             self.add_quadruple(four="#endtemplate")
         print "\nAnalisis Semantico: Cadena Aceptada\n"
-        print " Cuadruplos que describen la cadena de entrada: "
 
 
 class Generator:
