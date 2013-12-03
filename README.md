@@ -2,18 +2,18 @@ vslp
 ====
 
 Very Simple Language Parser
-
+====
 
 Descripción del Lenguaje
 VSLP (Very Simple Language Parser)
 Define en una sola sintaxis elementos de HTML y CSS
 Detecta errores de token inválidos, errores de sintaxis y uso invalido de objetos no definidos
-
+====
 Descripción del compilador/intérprete
 Lenguajes y utilerías especiales utilizadas para el desarrollo del proyecto
     Python 2.7 con los modulos de expresiones regulares
     No se utilizan librerías externas.
-
+====
 Descripción de análisis léxico
 Patrones de construcción (Expresiones regulares)
     INISET   =  \#set
@@ -38,8 +38,8 @@ Patrones de construcción (Expresiones regulares)
     LKEY     =  \{
     RKEY     =  \}
 
-
-o  Descripción de análisis sintáctico
+====
+Descripción de análisis sintáctico
     Gramática Formal
     A -> S C
     S -> C
@@ -58,14 +58,15 @@ o  Descripción de análisis sintáctico
     B -> for ( num , num ) { B }
     I -> B %}
     I -> %}
+====
+Descripción de análisis semántico y generación de código intermedio
 
-o  Descripción de análisis semántico y generación de código intermedio
 Luego del análisis sintáctico, pasamos a código intermedio, en donde se lleva un control de las variables declaradas
 Se diseñaron cuadruplos para la representacion intermedia del código de entrada
-
+====
 Descripción del ejecutor
-o  Lenguajes y utilerías especiales usadas para la generación del ejecutor
-o  Manejo de Memoria / Tabla de símbolos
+Lenguajes y utilerías especiales usadas para la generación del ejecutor
+Manejo de Memoria / Tabla de símbolos
 Pruebas de Funcionamiento
 
 
