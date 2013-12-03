@@ -62,6 +62,7 @@ Gramática Formal
     I -> B %}
     I -> %}
 
+Se utilizó un parser LL de implementacion propia. Se realiza análisis de First y Follow, se crea la tabla de parseo y se realiza en análisis semántico.
 
 Descripción de análisis semántico y generación de código intermedio
 ---
@@ -72,10 +73,6 @@ Se diseñaron cuadruplos para la representación intermedia del código de entra
 
 Descripción del ejecutor
 ---
-Lenguajes y utilerías especiales usadas para la generación del ejecutor
 
-Manejo de Memoria / Tabla de símbolos
-
-Pruebas de Funcionamiento
 
 
