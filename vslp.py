@@ -158,8 +158,7 @@ class Lexical:
                 print buffer_str
                 print "NO ACEPTADO"
                 return
-        print self.t
-        print self.d
+        print "\nAnalisis Lexico: Cadena Aceptada\n"
 
     def anasin(self):
 
@@ -184,16 +183,29 @@ class Lexical:
         self.__set_parsing_table()
 
 
-        #print 'GRAMATICA -> ', self.__grammar
-        #print 'PRIMEROS -> ', self.__first
-        #print 'SIGUIENTES -> ', self.__next
-        #print 'TERMINALES -> ', self.terminals
-        #print 'NO TERMINALES -> ', self.nonterminals
-        #print '\n\n\nTABLA ->'
-        for i in  self.parsing_table:
-            print i
+        print 'GRAMATICA'
+        for production in util.GRAMMAR:
+            print "\t%s -> %s" % (production[0], production[1])
+        print 'PRIMEROS'
+        for key in self.__first:
+            print "\t%s = %s" % (key, self.__first[key])
+        print 'SIGUIENTES'
+        for key in self.__next:
+            print "\t%s = %s" % (key, self.__next[key])
+        print 'TERMINALES = ', self.terminals
+        print 'NO TERMINALES = ', self.nonterminals
+        self.print_table()
 
-
+    def print_table(self):
+        print "\ntabla ll \n".upper()
+        for row in self.parsing_table:
+            string = ""
+            for index in row:
+                try:
+                    string = string + "[%2d ]" % index
+                except TypeError:
+                    string = string + "[eps]"
+            print string
 
     def get_terminals(self):
         for production in util.GRAMMAR:
@@ -428,6 +440,9 @@ class Quadruples:
         self.line = 0
         self.vars = []
 
+    def show_quadruples(self):
+        print self.quadruple
+
     def get_var_value(self,identifier):
         par = identifier.split(",")
         if par[0] == "NUM":
@@ -524,6 +539,8 @@ class Quadruples:
             self.add_quadruple(":",name,four="#template")
             self.inner_quadruples("ENDTEMP",3)
             self.add_quadruple(four="#endtemplate")
+        print "\nAnalisis Semantico: Cadena Aceptada\n"
+        print " Cuadruplos que describen la cadena de entrada: "
 
 
 class Generator:
@@ -538,12 +555,11 @@ lex.anasin()
 
 # Parser object
 parser = Parser( lex )
-parser.show_grammar()
-print " --> Start parsing <-- "
+print "\nPila del parser LL\n"
 parser.start_parser()
 
 # Quadruples object
 
 quad = Quadruples( parser.intercode )
 quad.start_quadruples()
-print quad.quadruple
+quad.show_quadruples()
